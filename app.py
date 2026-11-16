@@ -89,7 +89,7 @@ st.markdown(
     f"""
 Zwei Angaben zu einem Container messen fast dasselbe: etwa der **Vorlauf laut Reederei** und der **Vorlauf bis Ladeschluss** (Stichprobenkorrelation **ρ** nahe 1). Die Demo zeigt, **was dann aus den
 Koeffizienten, den Tests und der Merkmalsauswahl wird**: Die Varianz jedes Einzelkoeffizienten bläht sich um **1/(1 − ρ²)** auf, die ihrer Summe nicht; die Daten kennen die Summe, nicht die Aufteilung. Das **Lasso**
-wählt dann je Stichprobe eines von beiden, und die Häufigkeit, mit der **Bootstrap oder Teilstichproben einer Stichprobe** ein Merkmal wählen, sagt darüber weniger, als sie aussieht. Alle Zahlen sind
+wählt dann oft nur eines von beiden (und dann x₁ oder x₂ mit gleicher Häufigkeit), und die Häufigkeit, mit der **Bootstrap oder Teilstichproben einer Stichprobe** ein Merkmal wählen, sagt darüber weniger, als sie aussieht. Alle Zahlen sind
 **eigene Nachrechnung in diesem Modell, bei den genannten Parametern**; VIF, Lasso und Bootstrap sind Lehrbuchstoff, keine Neuheitsaussage. Der Containerstrom ist erfunden.
 
 Ridge-Regression und die Wahl von λ stehen in der {L('tikhonov-demo')} und der {L('parameterwahl-demo')}; dass die Koeffizienten bei
@@ -220,7 +220,7 @@ st.dataframe(
     ),
     hide_index=True, width="stretch",
 )
-st.caption("Mit y wählt der Bootstrap fast immer x₁, mit y′ fast immer x₂: die Zählung ist ein Spiegel der Daten, nicht der Welt (x₁ und x₂ sind in der Konstruktion austauschbar).")
+st.caption(f"Mit y wählt der Bootstrap meist x₁ (nur x₁ in {cnt_y[0]} Stichproben, nur x₂ in {cnt_y[1]}), mit y′ meist x₂ (nur x₂ in {cnt_ys[1]}, nur x₁ in {cnt_ys[0]}): die Zählung ist ein Spiegel der Daten, nicht der Welt (x₁ und x₂ sind in der Konstruktion austauschbar).")
 
 st.markdown("---")
 
@@ -250,7 +250,7 @@ kind, text = ev.verdict_q1(v)
 getattr(st, kind)(text)
 st.caption(
     f"Rechts: der VIF der **Stichprobe** (Zufallsdesign, 2000 Designs, Zähleinheit: ein Design) liegt im 5-bis-95-%-Bereich bei {de(100 * spread['rel05'], 0)} % bis +{de(100 * spread['rel95'], 0)} % um die Formel mit der Bevölkerungskorrelation; "
-    "die Formel gilt für die Stichprobe nur im Mittel."
+    "die Formel gilt für die Stichprobe nur näherungsweise (der Mittelwert des Stichproben-VIF liegt bei n = 30 etwa 10 % darüber)."
 )
 fz = _frozen()
 with st.expander("📊 Vorgerechnet: Summe und Differenz, Intervalle, VIF-Streuung (große Zählungen)"):
@@ -316,7 +316,7 @@ st.plotly_chart(build_selection(f4), width="stretch", key="selection_chart")
 a1, a2, a3 = st.columns(3)
 a1.metric("Anteil x₁ bei genau einem", C.pct(f4["share1"]), help=f"Unter den Stichproben, in denen genau eines der beiden gewählt wird ({f4['n_one']} von {f4['n_fresh']}).")
 a2.metric("Nichtnullen im Mittel", de(f4["nz"], 2))
-a3.metric("Attrappen x₄–x₁₀ im Mittel", C.pct(f4["att"]), help="Ein α nahe dem Kreuzvalidierungswert zielt auf Vorhersage, nicht auf Auswahl: es wählt viele Attrappen.")
+a3.metric("Attrappen x₄–x₁₀ im Mittel", C.pct(f4["att"]), help="Bei α = 0,09 wählt das Lasso viele Attrappen; ein größeres α (die Kreuzvalidierung wählt in S3 etwa 0,15 bis 0,2) senkt das, wählt aber weiter viele (Kontrollrechnung der README).")
 kind, text = ev.verdict_q2(f4, s.scen, s.n, s.rho, s.sigma, s.alpha, s.l1)
 getattr(st, kind)(text)
 with st.expander("🧭 Wann ist die richtige Auswahl überhaupt möglich? Die Bedingung von Zhao/Yu"):
@@ -400,9 +400,9 @@ st.markdown(
     f"""
 | Annahme | Was passiert, wenn sie verletzt ist | Wo es weitergeht |
 |---|---|---|
-| **α ist fest.** Die Auswahlzahlen gelten für ein vorgegebenes α, nicht für ein je Stichprobe per Kreuzvalidierung gewähltes. | Die Wahl von α ist selbst verrauscht; hier nicht gemessen. Ein α nahe dem Kreuzvalidierungswert zielt auf Vorhersage und wählt viele Attrappen. | {L('parameterwahl-demo')} (λ-Wahl) |
+| **α ist fest.** Die Auswahlzahlen gelten für ein vorgegebenes α, nicht für ein je Stichprobe per Kreuzvalidierung gewähltes. | Die Wahl von α ist selbst verrauscht; hier nicht gemessen. Ein größeres α (Kreuzvalidierung: in S3 etwa 0,15 bis 0,2) wählt weniger, aber weiter viele Attrappen (Kontrollrechnung der README; die Kreuzvalidierungswerte sind nicht im Test). | {L('parameterwahl-demo')} (λ-Wahl) |
 | **Die vorgerechneten Zählungen gelten für n = 100, p = 10, ρ = 0,95, σ = 2.** | Andere Reglerstellungen rechnet die App live mit kleinerer Wiederholungszahl; die README nennt nur die vorgerechneten Zellen. | – |
-| **Ein klar stärkeres Merkmal (Szenario S2).** | Dort stimmen Bootstrap und frische Stichproben überein: die Falle gilt, wenn zwei Merkmale gleich stark sind. Die Attrappe x₂ wird auch dann in etwa der Hälfte der Stichproben mitgewählt. | – |
+| **Ein klar stärkeres Merkmal (Szenario S2).** | Dort stimmen Bootstrap und frische Stichproben überein: die Falle zeigt sich bei zwei gleich starken Zwillingen (S1, S3), nicht im Extremfall S2 (β = 2 gegen 0); Zwischenstufen sind nicht gemessen. Die Attrappe x₂ wird auch dann in etwa der Hälfte der Stichproben mitgewählt. | – |
 | **Nur kontinuierliche Merkmale.** | Redundante Dummy-Spalten (Rang kleiner als p) sind strukturelle Kollinearität. | {L('faktoren-codierung-demo')} |
 | **Tests und Intervalle nach der Auswahl.** | Ohne Korrektur sind sie nach einer Lasso-Auswahl nicht gültig (nach den gelesenen Quellen, hier **nicht** gemessen). | {L('modellwahl-demo')} |
 | **Gaußsche Kleinste Quadrate.** | Gestraftes Logit, Zähldaten und andere Verteilungen sind nicht Teil dieser Demo. | – |
@@ -460,7 +460,7 @@ Das ist nach Zhao/Yu (2006) „fast notwendig und hinreichend“ für Auswahlkon
 | Faktor der Quadratsumme | $1/(2n)$ | wie scikit-learn und glmnet (glmnet-$\lambda$ = $\alpha$ hier) |
 | Standardisierung | je Anpassung, Teiler $n$ | ohne sie ändert Skalieren einer Spalte das Lasso |
 | $p$ | Merkmale ohne Achsenabschnitt | in Demos zu Kleinste Quadrate mit Achsenabschnitt zählt $p$ eine Spalte mehr |
-| Korrelation | Stichprobe bei Rechnungen an einer Stichprobe, Bevölkerung bei Formeln im Mittel | der VIF der Stichprobe streut um die Formel mit der Bevölkerungskorrelation |
+| Korrelation | Stichprobe bei Rechnungen an einer Stichprobe, Bevölkerung bei Formeln (für die Stichprobe nur näherungsweise) | der VIF der Stichprobe streut um die Formel mit der Bevölkerungskorrelation |
 
 **Literatur** (nach Quellenberichten zitiert): James u. a., *An Introduction to Statistical Learning*, 2. Aufl., Abschn. 3.3.3, S. 102 (VIF). Hastie/Tibshirani/Friedman, *The Elements of Statistical Learning*, Abschn. 3.2 (S. 54 f.), 3.4.2 und Kapitel 18 (S. 662).
 Tibshirani 1996, *Regression Shrinkage and Selection via the Lasso*, JRSS B 58. Friedman/Hastie/Tibshirani 2010, *Regularization Paths for Generalized Linear Models via Coordinate Descent*, J. Stat. Softw. 33(1), Gl. 5 und 6. Zhao/Yu 2006, *On Model Selection Consistency of Lasso*, JMLR 7, 2541–2563.

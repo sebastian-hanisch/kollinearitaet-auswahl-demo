@@ -72,7 +72,7 @@ PRESETS = {     # jedes Preset trägt seinen eigenen Zufalls-Seed: so sind die P
 }
 PRESET_HELP = {
     "Von Hand (vier Container)": "Das Handbeispiel mit vier erfundenen Containern, Brüche statt Messwerte; die übrigen Einstellungen auf Standard (S3, ρ = 0,95, n = 100, σ = 2, α = 0,09, Lasso).",
-    "Zwei Angaben, gleich schwach (S3)": "Zwei Merkmale mit Korrelation 0,95, beide mit β = 0,5 und ein drittes mit β = 1: hier wählt das Lasso je Stichprobe eines von beiden.",
+    "Zwei Angaben, gleich schwach (S3)": "Zwei Merkmale mit Korrelation 0,95, beide mit β = 0,5 und ein drittes mit β = 1: hier wählt das Lasso oft nur eines von beiden (mit gleicher Häufigkeit x₁ oder x₂), in gut der Hälfte der Stichproben beide.",
     "Zwei Angaben, gleich stark (S1)": "Beide Zwillinge mit β = 1: das Lasso wählt meist beide, die Auswahl der Bootstrap-Häufigkeiten bleibt trotzdem je Stichprobe entschieden.",
     "Nur der Vorlauf wirkt (S2, echter Generator)": "Antwort ist die lognormale Verweilzeit der Export-Container; der Vorlauf wirkt, die zweite Vorlaufangabe ist eine erfundene Kopie mit Korrelation 0,95.",
     "Elastic Net: Preis des Gruppeneffekts": "Wie S2E, aber mit ℓ = 0,5: das Elastic Net nimmt die Kopie des wirkenden Merkmals mit.",

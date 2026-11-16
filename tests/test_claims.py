@@ -134,6 +134,23 @@ def test_b6_recomputed_live_with_another_seed_in_a_band():
     assert f2["p1"] > 0.99 and 0.40 < f2["p2"] < 0.55 and f2["share1"] > 0.99          # S2: x₂ ist die Attrappe, in fast der Hälfte der Stichproben mitgewählt
 
 
+def test_b6_kontrollrechnung_groesseres_alpha_senkt_die_attrappenquote_nur_teilweise():
+    """README B6: bei α = 0,09 64,0 %; α = 0,15 rund 44 %, α = 0,2 rund 30 % (Kontrollrechnung, 2000 frische Stichproben, S3); weiter viele Attrappen."""
+    att = {a: ev.fresh_analysis("C", "S3", 100, 0.95, 2.0, a, 1.0, 2000, 1234)["att"] for a in (0.09, 0.15, 0.2)}
+    assert att[0.09] == pytest.approx(0.64, abs=0.03) and att[0.15] == pytest.approx(0.44, abs=0.03) and att[0.2] == pytest.approx(0.30, abs=0.03)
+    assert att[0.09] > att[0.15] > att[0.2] > 0.2
+
+
+def test_b4_mittelwert_des_stichproben_vif_liegt_ueber_der_formel():
+    """README Modell und B4: Mittelwert des Stichproben-VIF bei n = 30 etwa 10 % über 1/(1 − ρ²), bei n = 100 etwa 3 %, bei n = 1000 kaum (20 000 Designs je Zelle)."""
+    def ratio(n, rho):
+        r = I.vif_spread(n, rho, 20000, 777)
+        return float(np.mean(r["vifs"])) / r["formula"]
+    assert 1.07 < ratio(30, 0.9) < 1.14 and 1.08 < ratio(30, 0.99) < 1.15
+    assert 1.01 < ratio(100, 0.9) < 1.05 and 1.01 < ratio(100, 0.99) < 1.06
+    assert ratio(1000, 0.9) < 1.01
+
+
 # --- B7: die Falle des Bootstraps (200 Originalstichproben je Zelle, B = 100) ---------------------------------------------------------------------
 
 def test_b7_bootstrap_difference_per_original_sample_against_fresh_samples_in_s3(fz):

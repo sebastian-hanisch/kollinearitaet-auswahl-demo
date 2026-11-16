@@ -238,7 +238,7 @@ def verdict_q3(fresh, boot, scen, scheme_label, pi):
                                   f"unter 0,25, während er über frische Stichproben bei {C.pct(fresh['share1'])} liegt: **der Bootstrap zeigt eine Entscheidung, die es über Stichproben nicht gibt**. "
                                   f"Die Regel „Häufigkeit ≥ {de(pi, 1)} gilt als stabil“ meldet genau x₁ in {C.pct(boot['only1_st'])}, genau x₂ in {C.pct(boot['only2_st'])}, beide in "
                                   f"{C.pct(boot['both_st'])} der Originalstichproben.")
-    return "info", head + (f" Beide stimmen hier überein (Unterschied der Beträge unter 0,15): ist ein Merkmal klar stärker, bildet der Bootstrap die Verhältnisse ab. Die Regel „Häufigkeit ≥ {de(pi, 1)}“ meldet genau x₁ in "
+    return "info", head + (f" Beide stimmen hier überein (Unterschied der Beträge unter 0,15): bei einem klar stärkeren Merkmal bildet der Bootstrap die Verhältnisse ab (gemessen nur in S2 und S2E); Zwischenstufen sind nicht gemessen. Die Regel „Häufigkeit ≥ {de(pi, 1)}“ meldet genau x₁ in "
                            f"{C.pct(boot['only1_st'])}, genau x₂ in {C.pct(boot['only2_st'])}, beide in {C.pct(boot['both_st'])} der {m} Originalstichproben.")
 
 
