@@ -69,9 +69,9 @@ Alle Zahlen gelten **für das Modell oben bei den genannten Parametern** (soweit
 
 Alle übrigen Zahlen der App (Verdikte, Metriken) kommen aus den Funktionen, die diese Tests prüfen; die Verdikt-Texte stehen in `tests/test_verdicts.py` an handgesetzten Zeilen.
 
-## Befunde und Korrekturen gegenüber dem Plan
+## Befunde und Korrekturen gegenüber der ersten Rechnung
 
-Die Planung vor dem Bau stützte sich auf eine erste Rechnung mit anderen Zufallsströmen (numpy). Im Bau mit dem eigenen Zufall neu gemessen, gelten diese Zahlen; was sich verschob oder nicht bestätigte:
+Die erste Rechnung vor dem Bau nahm andere Zufallsströme (numpy). Mit dem eigenen Zufall neu gemessen, gelten diese Zahlen; was sich verschob oder nicht bestätigte:
 - **Bootstrap, S3:** der Anteil „klar“ ist 65,0 % (Bootstrap) und 58,0 % (Teilstichproben), die erste Rechnung ergab 61,0 % und 55,0 %; ein zweiter Zufalls-Seed gibt 59,0 % und 56,5 %: die Zählung schwankt um 6 Punkte, der Befund (je Stichprobe entschieden, im Mittel nicht schief) hält. Die Zahl „0,888 gegen 0,521“ einer früheren Messung gilt für **eine** Originalstichprobe und steht hier nicht; über 200 Originale ist der Mittelwert des Anteils 0,477 gegen 0,495 frisch.
 - **Neu standardisiert:** in jeder Bootstrap- und Teilstichprobe werden die Merkmale hier neu standardisiert (die erste Rechnung zentrierte nur y); \|P(x₁) − P(x₂)\| je Original ist 0,392 statt 0,405.
 - **Elastic Net, S2:** die Attrappe x₂ wird in Welt C zu 95,2 % gewählt (erste Rechnung, Gauß-Welt: 96,6 %); Export-Zweig 99,2 % statt 99,4 %.
@@ -155,4 +155,4 @@ Gebaut mit Streamlit, Plotly, NumPy, SciPy und pandas; scikit-learn nur für die
 
 ---
 
-Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zu den Demos: [Interaktive Demos](https://sebastianhanisch.net/demos.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Regression und GLM: wann die Gleichung trügt](https://sebastianhanisch.net/konzepte-regression.html).
